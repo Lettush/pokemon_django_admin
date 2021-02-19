@@ -18,6 +18,7 @@ class SpeciesForm(forms.ModelForm):
 
 class SpeciesAdmin(admin.ModelAdmin):
     list_display = ('name', 'evolution_level', 'next_evolution', 'get_types')
+    filter_horizontal = ('types',)
     form = SpeciesForm
 
 
