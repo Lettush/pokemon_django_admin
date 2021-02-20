@@ -3,6 +3,7 @@ from django.db import models
 # Create your models here.
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.forms import forms
 from django.forms import ModelForm
 from django.core.exceptions import ValidationError
@@ -20,7 +21,7 @@ class Type(models.Model):
 
 class Species(models.Model):
     name = models.CharField(max_length=20)
-    evolution_level = models.IntegerField(verbose_name='Evolution Level', blank=True, null=True)
+    evolution_level = models.IntegerField(verbose_name='Evolution Level', blank=True, null=True, validators = [MinValueValidator(0.0)])
     next_evolution = models.ForeignKey('self', on_delete=models.CASCADE, verbose_name='Next Evolution', default='----',
                                        blank=True, null=True)
     types = models.ManyToManyField(Type, blank=True)
@@ -38,7 +39,7 @@ class Species(models.Model):
 class Pokemon(models.Model):
     nickname = models.CharField(max_length=20)
     species = models.ForeignKey(Species, on_delete=models.CASCADE)
-    level = models.IntegerField(default=1)
+    level = models.IntegerField(default=1, validators = [MinValueValidator(1)])
     trainer = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def save(self, *args, **kwargs):
